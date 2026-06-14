@@ -1,53 +1,98 @@
 # cellscript-swap-builder
 
-Deterministic swap transaction builder that constructs valid CKB transactions by ingesting CellScript contract metadata (ProofPlan), targeting the `amm_pool` AMM protocol.
+A local-devnet transaction builder experiment for CellScript's `amm_pool.cell`.
+
+The repo exists to document what an off-chain builder must know before it can
+construct valid CellScript AMM transactions on CKB. It is not a finished swap
+implementation yet.
+
+## Goal
+
+Reach this real transaction path on a local CKB devnet:
+
+```text
+MintAuthority bootstrap -> mint real token.elf token cells -> seed_pool -> swap_a_for_b
+```
+
+The current blocker is the first step: understanding how `token.cell` expects
+the genesis `MintAuthority` cell to be created.
+
+## What Exists
+
+- `amm_pool.elf`, `token.elf`, and `always_success.elf` deployed locally
+- CCC scripts for deploy, funding, signing, and test-cell creation
+- A verified CCC signing flow using `prepareTransaction()` before signing
+- A Rust builder that encodes token data, pool data, swap math, and WitnessArgs
+- Builder notes recording verified devnet behavior and unresolved assumptions
 
 ## Status
 
-Pre-alpha — the builder correctly computes swap amounts, encodes Pool/Token/LPReceipt molecule data, and constructs the CKB transaction JSON with proper EntryWitness and WitnessArgs. Currently using mock live cells — wiring to real devnet cells in progress.
+Pre-alpha. The repo is useful as a builder friction report and an encoding
+experiment. It has not produced a CKB-accepted AMM transaction.
+
+The project intentionally stops before pretending the AMM path works. Real
+`token.elf` token-cell creation is unresolved.
+
+## Verified Locally
+
+- `offckb deploy` for single ELF deployment
+- CCC transaction construction and secp256k1 signing
+- CellDep format and script structure
+- ckb2023 capacity rules (1 CKB per byte)
+- Devnet cell lifecycle (create, fund, consume)
+- Molecule `WitnessArgs` offset behavior for absent fields
+
+## What is Unproven
+
+- Token cell creation with `token.elf` type script
+- `seed_pool` transaction (consuming two token cells, creating pool + receipt)
+- Swap transaction against a pool
+- EntryWitness encoding validated by a running CellScript contract
+- The Rust builder's output accepted by CKB consensus
+- ProofPlan validation in the builder
+
+## Main Constraint
+
+`token.cell` starts with `mint(auth_before: MintAuthority, to: Address, amount: u64)`.
+That action needs an existing `MintAuthority` input. I have not found the
+intended path for creating the first `MintAuthority` cell.
+
+Until that is clear, using `always_success.elf` as a token type is only a local
+test shortcut. It does not validate token rules.
 
 ## Project Structure
 
 ```
 swap-builder/
-├── src/main.rs              # Builder logic: encoding, math, tx construction
-├── Cargo.toml
-├── builder_assumptions.json # ProofPlan assumptions extracted via `cellc explain-proof`
-├── evidence.json            # Builder evidence for runtime-required assumptions
-├── example_input.json       # Example swap input (uses real deployed contract hashes)
-├── scripts/
-│   ├── deploy.js            # CCC-based ELF deployment
-│   └── sign.js              # CCC-based transaction signing
-└── README.md
+  src/main.rs              swap math, data encoding, tx construction
+  example_input.json       template with placeholder values
+  scripts/
+    deploy.js              ELF deployment via CCC
+    create_tokens.js       test token cells (uses always_success workaround)
+    fund_always_success.js funding tx helper
+    create_always_success.js always_success cell creation
+    sign.js                transaction signing
+  BUILDERS_NOTES.md        friction log (verified vs unresolved)
 ```
 
 ## Usage
 
-```bash
+```
 # Generate example input
 cargo run -- --example
 
-# Build a swap transaction from input
+# Build a mock swap transaction shape (not devnet accepted yet)
 cargo run -- example_input.json
 ```
 
-## CellScript Contracts Used
+## Open Questions
 
-- `amm_pool.elf` — code_hash `0x3406e2a1…`, deployment tx `0x30c25a1a…`
-- `token.elf` — code_hash `0xff9c0f12…`, deployment tx `0x82963c9d…`
+- How should the first `MintAuthority` cell be created for `token.cell`?
+- Is first-action-on-creation a guaranteed CellScript rule?
+- What is the canonical builder path for CellScript EntryWitness encoding?
+- Which ProofPlan assumptions should an off-chain builder enforce before signing?
+- What is the recommended local fixture pattern for testing `token.cell`?
 
-Both compiled from [`cellscript/examples/`](https://github.com/a19q3/CellScript) at v0.16.0.
+## Acknowledgments
 
-## How It Works
-
-1. **Parse input** — pool cell data (42 bytes), user token cell data (16 bytes), outpoints, lock/type scripts, cell deps
-2. **Compute** — constant product k = reserve_a * reserve_b, apply fee, verify amount_out >= min_output
-3. **Encode** — pool_after (42 bytes), token_out (16 bytes), EntryWitness (48 bytes), WitnessArgs (variable)
-4. **Output** — complete CKB transaction JSON with ProofPlan assumptions embedded
-
-## Encountered Friction Points
-
-- **EntryWitness format** reverse-engineered from CellScript source; no public spec
-- **Creation vs mutation dispatch** — first listed action runs on creation, witness-determined on mutation
-- **Token type identity** — `type_hash()` must differ between token A and B; type script args convention unclear
-- **CCC signing pipeline** — `prepareTransaction` required before `signOnlyTransaction` for correct sighash
+Contracts by ArthurZhang and the CellScript team at cell-labs.

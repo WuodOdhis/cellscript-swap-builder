@@ -60,35 +60,22 @@ fn encode_swap_witness(min_output: u64, to: &[u8; 32]) -> Vec<u8> {
 }
 
 /// Encode a CKB Molecule WitnessArgs with input_type set.
-/// Molecule table WitnessArgs { lock: BytesOpt, input_type: BytesOpt, output_type: BytesOpt }
+/// Molecule table: total_size (u32) + offset_to_lock (u32) + offset_to_input_type (u32) + offset_to_output_type (u32) + fields
+/// When offset == total_size the field is absent (None).
+/// lock is None, input_type = Bytes(len + data), output_type is None.
+/// Total: 16-byte header + 4-byte len prefix + input data, no trailing bytes for absent fields.
 fn encode_witness_args(input_type: &[u8]) -> Vec<u8> {
-    // WitnessArgs fields are fixed-size optionals: each is either 0 bytes (None)
-    // or a molecule Bytes (u32 length prefix + data).
-    // The table has 3 fields. We only set input_type.
-    // Molecule table: total_size (u32) + field offsets (u32 * 3) + field data
-    let input_type_bytes: Vec<u8> = {
-        // Bytes: u32 length + data
-        let mut b = Vec::with_capacity(4 + input_type.len());
-        b.extend_from_slice(&(input_type.len() as u32).to_le_bytes());
-        b.extend_from_slice(input_type);
-        b
-    };
-    // Offsets: lock=16 (None → points past itself = same as start), input_type=16, output_type=16+input_len
-    let lock_offset: u32 = 16; // None → offset points to itself (or 4 for empty)
-    let input_type_offset: u32 = 16; // start of input_type field
-    let output_type_offset: u32 = 16 + input_type_bytes.len() as u32;
+    let header: u32 = 16;
+    let input_len: u32 = 4 + input_type.len() as u32;
+    let total_size = header + input_len;
 
-    let mut buf = Vec::with_capacity(16 + input_type_bytes.len());
-    buf.extend_from_slice(&lock_offset.to_le_bytes());
-    buf.extend_from_slice(&input_type_offset.to_le_bytes());
-    buf.extend_from_slice(&output_type_offset.to_le_bytes());
-    // lock field: None = 0x00000000 (empty BytesOpt)
-    buf.extend_from_slice(&[0u8; 4]);
-    // input_type field
-    buf.extend_from_slice(&input_type_bytes);
-    // output_type field: None
-    // output_type_offset already points here, and empty BytesOpt = 4 bytes of zero
-    buf.extend_from_slice(&[0u8; 4]);
+    let mut buf = Vec::with_capacity(total_size as usize);
+    buf.extend_from_slice(&total_size.to_le_bytes());     // total_size
+    buf.extend_from_slice(&header.to_le_bytes());          // lock_offset (absent, same as input_type)
+    buf.extend_from_slice(&header.to_le_bytes());          // input_type_offset (= lock_offset → lock is None)
+    buf.extend_from_slice(&total_size.to_le_bytes());      // output_type_offset (= total_size → output_type is None)
+    buf.extend_from_slice(&(input_type.len() as u32).to_le_bytes()); // Bytes length prefix
+    buf.extend_from_slice(input_type);                     // Bytes data
     buf
 }
 
@@ -103,7 +90,10 @@ fn blake2b_256(data: &[u8]) -> [u8; 32] {
     out
 }
 
-fn compute_tx_hash(tx_json: &serde_json::Value) -> String {
+fn compute_local_id(tx_json: &serde_json::Value) -> String {
+    // NOTE: This is NOT the CKB tx hash. CKB computes tx hash from
+    // molecule-serialized bytes, not JSON. This is a local identifier
+    // for matching outputs to inputs in offline usage.
     let json_str = serde_json::to_string(tx_json).unwrap();
     let hash = blake2b_256(json_str.as_bytes());
     format!("0x{}", hex::encode(hash))
@@ -173,16 +163,6 @@ fn to_json_cell_dep(dep: &CellDepStruct) -> serde_json::Value {
         "out_point": to_json_outpoint(&dep.out_point),
         "dep_type": dep.dep_type,
     })
-}
-
-/// Returns the 34 builder_assumptions from the ProofPlan metadata for swap_a_for_b.
-fn get_builder_assumptions() -> Vec<serde_json::Value> {
-    serde_json::from_str(include_str!("../builder_assumptions.json")).unwrap()
-}
-
-/// Returns the 8 builder_assumption_evidence entries for the runtime-required assumptions.
-fn get_builder_assumption_evidence() -> Vec<serde_json::Value> {
-    serde_json::from_str(include_str!("../evidence.json")).unwrap()
 }
 
 pub fn build_swap(input: &SwapInput) -> Result<SwapOutput> {
@@ -265,11 +245,9 @@ pub fn build_swap(input: &SwapInput) -> Result<SwapOutput> {
         "witnesses": [
             format!("0x{}", hex::encode(&witness_args)),
         ],
-        "builder_assumptions": get_builder_assumptions(),
-        "builder_assumption_evidence": get_builder_assumption_evidence(),
     });
 
-    let tx_hash = compute_tx_hash(&ckb_tx);
+    let tx_hash = compute_local_id(&ckb_tx);
 
     Ok(SwapOutput {
         ckb_tx,
