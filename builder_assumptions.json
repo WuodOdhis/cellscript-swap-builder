@@ -1,0 +1,714 @@
+[
+  {
+    "assumption_id": "ba-ae5d475790785655",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: Requires the CKB-style transaction context and syscall ABI during verification)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume-input-cell",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:swap_a_for_b",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-f936c74a36c5bef3",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: Requires the CKB-style transaction context and syscall ABI during verification)",
+    "failure_mode": "reject-before-signing",
+    "feature": "verify-output-cell",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:swap_a_for_b",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-798b3ba746cf3dd8",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL input from Input#0 bound to pool_before)",
+    "failure_mode": "reject-before-signing",
+    "feature": "input:Input#0",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:swap_a_for_b",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-80ba86bad95e85f6",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL consume from Input#1 bound to input)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume:Input#1",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:swap_a_for_b",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-a3d30a6e145853b3",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL output from Output#0 bound to pool_after)",
+    "failure_mode": "reject-before-signing",
+    "feature": "output:Output#0",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:swap_a_for_b",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-5366069bf4f8d37e",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL output from Output#1 bound to token_out)",
+    "failure_mode": "reject-before-signing",
+    "feature": "output:Output#1",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:swap_a_for_b",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-1ec0d432b43bcef5",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(runtime-required: Runtime verifier must prove 'Token' resource conservation across 1 consumed Input cell(s) and 1 created Output cell(s); guarded resource transition classification has unchecked fields: amount; preserved fields: -; guarded fields: symbol; allowed fresh fields: -; resource-conservation=runtime-required)",
+    "failure_mode": "reject-before-signing",
+    "feature": "resource-conservation:Token",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:swap_a_for_b",
+    "proof_plan_status": "runtime-required",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-1ba055a50058e71b",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(runtime-required: 'Pool' creation is lowered as ordinary shared Cell creation plus pool-pattern metadata; unresolved components: token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant)",
+    "failure_mode": "reject-before-signing",
+    "feature": "pool-create:Pool",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:swap_a_for_b",
+    "proof_plan_status": "runtime-required",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-16dbc5a32e7a23bb",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(runtime-required: Pool primitive create:Pool checked components [ordinary-shared-create-summary, create-output-fields=checked-runtime, assert-invariant-cfg=9, source-invariant:source-guard-0=checked-runtime, source-invariant:source-guard-1=checked-runtime, source-invariant:source-guard-2=checked-runtime, source-invariant:source-guard-3=checked-runtime, source-invariant:source-guard-4=checked-runtime, source-invariant:source-guard-5=checked-runtime, source-invariant:source-guard-6=checked-runtime, source-invariant:source-guard-7=checked-runtime, source-invariant:source-guard-8=checked-runtime]; runtime-required components [token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant])",
+    "failure_mode": "reject-before-signing",
+    "feature": "pool-create:Pool",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:swap_a_for_b",
+    "proof_plan_status": "runtime-required",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-2e4dce9931fe1905",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: Requires the CKB-style transaction context and syscall ABI during verification)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume-input-cell",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:seed_pool",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-265fb4e9d14698e0",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: Requires the CKB-style transaction context and syscall ABI during verification)",
+    "failure_mode": "reject-before-signing",
+    "feature": "verify-output-cell",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:seed_pool",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-1db5c00756c5718c",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL consume from Input#0 bound to token_a)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume:Input#0",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:seed_pool",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-8bfbf19a7d86bcb8",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL consume from Input#1 bound to token_b)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume:Input#1",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:seed_pool",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-49dc9e35a86189eb",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL output from Output#0 bound to pool)",
+    "failure_mode": "reject-before-signing",
+    "feature": "output:Output#0",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:seed_pool",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-7219c8a777d86c10",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL output from Output#1 bound to receipt)",
+    "failure_mode": "reject-before-signing",
+    "feature": "output:Output#1",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:seed_pool",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-5acf731bc8d1a547",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: Requires the CKB-style transaction context and syscall ABI during verification)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume-input-cell",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:add_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-1ab45b6db0077a25",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: Requires the CKB-style transaction context and syscall ABI during verification)",
+    "failure_mode": "reject-before-signing",
+    "feature": "verify-output-cell",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:add_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-c119bbb91c5a2f87",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL input from Input#0 bound to pool_before)",
+    "failure_mode": "reject-before-signing",
+    "feature": "input:Input#0",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:add_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-ceca34b49a2fa099",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL consume from Input#1 bound to token_a)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume:Input#1",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:add_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-d2eb0126487bea2e",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL consume from Input#2 bound to token_b)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume:Input#2",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:add_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-ee0cebd088c30674",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL output from Output#0 bound to pool_after)",
+    "failure_mode": "reject-before-signing",
+    "feature": "output:Output#0",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:add_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-831888002ad6e0d7",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL output from Output#1 bound to receipt)",
+    "failure_mode": "reject-before-signing",
+    "feature": "output:Output#1",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:add_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-c0bccb163b9e287b",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(runtime-required: 'Pool' creation is lowered as ordinary shared Cell creation plus pool-pattern metadata; unresolved components: token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant)",
+    "failure_mode": "reject-before-signing",
+    "feature": "pool-create:Pool",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:add_liquidity",
+    "proof_plan_status": "runtime-required",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-2f0bef40dc16e22c",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(runtime-required: Pool primitive create:Pool checked components [ordinary-shared-create-summary, create-output-fields=checked-runtime, assert-invariant-cfg=8, source-invariant:source-guard-0=checked-runtime, source-invariant:source-guard-1=checked-runtime, source-invariant:source-guard-2=checked-runtime, source-invariant:source-guard-3=checked-runtime, source-invariant:source-guard-4=checked-runtime, source-invariant:source-guard-5=checked-runtime, source-invariant:source-guard-6=checked-runtime, source-invariant:source-guard-7=checked-runtime]; runtime-required components [token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant])",
+    "failure_mode": "reject-before-signing",
+    "feature": "pool-create:Pool",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:add_liquidity",
+    "proof_plan_status": "runtime-required",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-c47db58c93112986",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: Requires the CKB-style transaction context and syscall ABI during verification)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume-input-cell",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:remove_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-e29ef7ebcea40b57",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: Requires the CKB-style transaction context and syscall ABI during verification)",
+    "failure_mode": "reject-before-signing",
+    "feature": "verify-output-cell",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:remove_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-b12f39fc51907028",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL input from Input#0 bound to pool_before)",
+    "failure_mode": "reject-before-signing",
+    "feature": "input:Input#0",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:remove_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-3aaeabf8629d5725",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL consume from Input#1 bound to receipt)",
+    "failure_mode": "reject-before-signing",
+    "feature": "consume:Input#1",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:remove_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-e44e0aa9da9fa6c4",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL output from Output#0 bound to pool_after)",
+    "failure_mode": "reject-before-signing",
+    "feature": "output:Output#0",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:remove_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-e514475ee3ad8d1a",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL output from Output#1 bound to token_a_out)",
+    "failure_mode": "reject-before-signing",
+    "feature": "output:Output#1",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:remove_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-35de9526a1f2cea6",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(ckb-runtime: LOAD_CELL output from Output#2 bound to token_b_out)",
+    "failure_mode": "reject-before-signing",
+    "feature": "output:Output#2",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "builder_evidence",
+    "origin": "action:remove_liquidity",
+    "proof_plan_status": "ckb-runtime",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-26e8b6c2e0933f4c",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(runtime-required: 'Pool' creation is lowered as ordinary shared Cell creation plus pool-pattern metadata; unresolved components: token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant)",
+    "failure_mode": "reject-before-signing",
+    "feature": "pool-create:Pool",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:remove_liquidity",
+    "proof_plan_status": "runtime-required",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-15f2070f9d754532",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "declared(runtime-required: Pool primitive create:Pool checked components [ordinary-shared-create-summary, create-output-fields=checked-runtime, assert-invariant-cfg=7, source-invariant:source-guard-0=checked-runtime, source-invariant:source-guard-1=checked-runtime, source-invariant:source-guard-2=checked-runtime, source-invariant:source-guard-3=checked-runtime, source-invariant:source-guard-4=checked-runtime, source-invariant:source-guard-5=checked-runtime, source-invariant:source-guard-6=checked-runtime]; runtime-required components [token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant])",
+    "failure_mode": "reject-before-signing",
+    "feature": "pool-create:Pool",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:remove_liquidity",
+    "proof_plan_status": "runtime-required",
+    "required_cell_deps": [],
+    "required_inputs": [
+      "input:*"
+    ],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  },
+  {
+    "assumption_id": "ba-eabc81b64927584b",
+    "capacity_policy": "occupied-capacity-and-tx-size-evidence-required",
+    "change_policy": "change-outputs-must-not-violate-proof-plan-shape",
+    "detail": "builder must satisfy occupied-capacity and transaction-size limits for created or mutated outputs",
+    "failure_mode": "reject-before-signing",
+    "feature": "capacity-planning",
+    "fee_policy": "builder-balances-fee-before-signing",
+    "kind": "capacity_policy",
+    "origin": "constraints.ckb",
+    "proof_plan_status": "builder-required",
+    "required_cell_deps": [],
+    "required_inputs": [],
+    "required_outputs": [
+      "output:*"
+    ],
+    "required_witness_fields": [],
+    "signature_policy": "none"
+  }
+]

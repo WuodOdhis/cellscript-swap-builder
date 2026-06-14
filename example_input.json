@@ -1,0 +1,48 @@
+{
+  "pool_outpoint": {
+    "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "index": 0
+  },
+  "pool_cell_data": "0x5553444320202020434b42202020202040420f000000000080f0fa02000000005be56b00000000001e00",
+  "pool_lock": {
+    "code_hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "hash_type": "data1",
+    "args": "0x"
+  },
+  "input_outpoint": {
+    "tx_hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "index": 0
+  },
+  "input_cell_data": "0xe8030000000000005553444320202020",
+  "input_lock": {
+    "code_hash": "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8",
+    "hash_type": "type",
+    "args": "0x0000000000000000000000000000000000000000"
+  },
+  "min_output": 49000,
+  "recipient": "0x0101010101010101010101010101010101010101010101010101010101010101",
+  "pool_type_script": {
+    "code_hash": "0x3406e2a123ef2d7bbdb5a49e4cda930e3924f7f3c325c9003dd0d3fca4921db3",
+    "hash_type": "data1",
+    "args": "0x"
+  },
+  "token_type_script": {
+    "code_hash": "0xff9c0f12667651ce641ea17b046c8382779202e3a8a76d332fbf0b981f8fc1c3",
+    "hash_type": "data1",
+    "args": "0x"
+  },
+  "pool_elf_cell_dep": {
+    "out_point": {
+      "tx_hash": "0x30c25a1a03b6080167ae0fb415f6261176d7a6e0542b9e1242de4300fe4c7dbc",
+      "index": 0
+    },
+    "dep_type": "code"
+  },
+  "token_type_cell_dep": {
+    "out_point": {
+      "tx_hash": "0x82963c9d79aaddb07b2ddfffa140749a186faa9bdfb72037584fbba9f2c435ea",
+      "index": 0
+    },
+    "dep_type": "code"
+  }
+}

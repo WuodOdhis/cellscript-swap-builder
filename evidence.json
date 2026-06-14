@@ -1,0 +1,90 @@
+[
+  {
+    "assumption_id": "ba-1ec0d432b43bcef5",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:swap_a_for_b",
+    "feature": "resource-conservation:Token",
+    "proof_plan_status": "runtime-required",
+    "evidence": {
+      "note": "builder acknowledges runtime_required_proof_plan: resource-conservation:Token",
+      "detail": "declared(runtime-required: Runtime verifier must prove 'Token' resource conservation across 1 consumed Input cell(s) and 1 created Output cell(s); guarded resource transition classification has unchecked fields: amount; preserved fields: -; guarded fields: symbol; allowed fresh fields: -; resource-conservation=runtime-required)"
+    }
+  },
+  {
+    "assumption_id": "ba-1ba055a50058e71b",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:swap_a_for_b",
+    "feature": "pool-create:Pool",
+    "proof_plan_status": "runtime-required",
+    "evidence": {
+      "note": "builder acknowledges runtime_required_proof_plan: pool-create:Pool",
+      "detail": "declared(runtime-required: 'Pool' creation is lowered as ordinary shared Cell creation plus pool-pattern metadata; unresolved components: token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant)"
+    }
+  },
+  {
+    "assumption_id": "ba-16dbc5a32e7a23bb",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:swap_a_for_b",
+    "feature": "pool-create:Pool",
+    "proof_plan_status": "runtime-required",
+    "evidence": {
+      "note": "builder acknowledges runtime_required_proof_plan: pool-create:Pool",
+      "detail": "declared(runtime-required: Pool primitive create:Pool checked components [ordinary-shared-create-summary, create-output-fields=checked-runtime, assert-invariant-cfg=9, source-invariant:source-guard-0=checked-runtime, source-invariant:source-guard-1=checked-runtime, source-invariant:source-guard-2=checked-runtime, source-invariant:source-guard-3=checked-runtime, source-invariant:source-guard-4=checked-runtime, source-invariant:source-guard-5=checked-runtime, source-invariant:source-guard-6=checked-runtime, source-invariant:source-guard-7=checked-runtime, source-invariant:source-guard-8=checked-runtime]; runtime-required components [token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant])"
+    }
+  },
+  {
+    "assumption_id": "ba-c0bccb163b9e287b",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:add_liquidity",
+    "feature": "pool-create:Pool",
+    "proof_plan_status": "runtime-required",
+    "evidence": {
+      "note": "builder acknowledges runtime_required_proof_plan: pool-create:Pool",
+      "detail": "declared(runtime-required: 'Pool' creation is lowered as ordinary shared Cell creation plus pool-pattern metadata; unresolved components: token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant)"
+    }
+  },
+  {
+    "assumption_id": "ba-2f0bef40dc16e22c",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:add_liquidity",
+    "feature": "pool-create:Pool",
+    "proof_plan_status": "runtime-required",
+    "evidence": {
+      "note": "builder acknowledges runtime_required_proof_plan: pool-create:Pool",
+      "detail": "declared(runtime-required: Pool primitive create:Pool checked components [ordinary-shared-create-summary, create-output-fields=checked-runtime, assert-invariant-cfg=8, source-invariant:source-guard-0=checked-runtime, source-invariant:source-guard-1=checked-runtime, source-invariant:source-guard-2=checked-runtime, source-invariant:source-guard-3=checked-runtime, source-invariant:source-guard-4=checked-runtime, source-invariant:source-guard-5=checked-runtime, source-invariant:source-guard-6=checked-runtime, source-invariant:source-guard-7=checked-runtime]; runtime-required components [token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant])"
+    }
+  },
+  {
+    "assumption_id": "ba-26e8b6c2e0933f4c",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:remove_liquidity",
+    "feature": "pool-create:Pool",
+    "proof_plan_status": "runtime-required",
+    "evidence": {
+      "note": "builder acknowledges runtime_required_proof_plan: pool-create:Pool",
+      "detail": "declared(runtime-required: 'Pool' creation is lowered as ordinary shared Cell creation plus pool-pattern metadata; unresolved components: token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant)"
+    }
+  },
+  {
+    "assumption_id": "ba-15f2070f9d754532",
+    "kind": "runtime_required_proof_plan",
+    "origin": "action:remove_liquidity",
+    "feature": "pool-create:Pool",
+    "proof_plan_status": "runtime-required",
+    "evidence": {
+      "note": "builder acknowledges runtime_required_proof_plan: pool-create:Pool",
+      "detail": "declared(runtime-required: Pool primitive create:Pool checked components [ordinary-shared-create-summary, create-output-fields=checked-runtime, assert-invariant-cfg=7, source-invariant:source-guard-0=checked-runtime, source-invariant:source-guard-1=checked-runtime, source-invariant:source-guard-2=checked-runtime, source-invariant:source-guard-3=checked-runtime, source-invariant:source-guard-4=checked-runtime, source-invariant:source-guard-5=checked-runtime, source-invariant:source-guard-6=checked-runtime]; runtime-required components [token-pair-symbol-admission, token-pair-identity-admission, positive-reserve-admission, fee-policy, lp-supply-invariant])"
+    }
+  },
+  {
+    "assumption_id": "ba-eabc81b64927584b",
+    "kind": "capacity_policy",
+    "origin": "constraints.ckb",
+    "feature": "capacity-planning",
+    "proof_plan_status": "builder-required",
+    "evidence": {
+      "note": "builder acknowledges capacity_policy: capacity-planning",
+      "detail": "builder must satisfy occupied-capacity and transaction-size limits for created or mutated outputs"
+    }
+  }
+]
