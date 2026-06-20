@@ -28,7 +28,7 @@ validation.
 
 - CCC scripts for deploy, funding, signing, and test-cell creation
 - A verified CCC signing flow using `prepareTransaction()` before signing
-- A Rust builder that encodes token data, pool data, swap math, and CKB WitnessArgs
+- A Rust builder that encodes token data, pool data, swap math, and witness bytes
 - Builder notes recording verified devnet behavior and resolved or unresolved assumptions
 
 ## Status
@@ -80,7 +80,10 @@ cellc entry-witness examples/amm_pool.cell --target-profile ckb --action swap_a_
 ```
 
 Use the resulting `witness_hex` as `entry_witness` in `example_input.json`. The
-Rust builder only wraps those canonical bytes into CKB `WitnessArgs.input_type`.
+Rust builder passes those canonical bytes as the raw CellScript entry witness.
+Do not wrap entry-witness bytes in `WitnessArgs.input_type` by default. Use
+`WitnessArgs.input_type` or `WitnessArgs.output_type` only when the CellScript
+source explicitly reads those witness surfaces.
 
 ## Project Structure
 
@@ -101,20 +104,21 @@ swap-builder/
 ## Current Boundary
 
 The committed `launch_token` transaction used fixture-style type scripts for
-`MintAuthority`, `Token`, `Pool`, and `LPReceipt`, matching the kind of scaffolding
-used by CellScript's local acceptance harness. It proves the scoped CellScript
-launch action can validate and commit a topology transaction locally.
+`MintAuthority`, `Token`, `Pool`, and `LPReceipt`, matching local scaffolding.
+It proves the scoped CellScript launch action can validate and commit a topology
+transaction locally.
 
 It does not prove the final production artifact model for token or AMM resource
-cells. Before building further, this repo should clarify the intended external
-builder pattern with the CellScript team.
+cells. For a reusable builder, each CellScript action should be compiled as an
+explicit scoped artifact with `--entry-action`, bound to its artifact, CellDep,
+and script identity, and encoded according to compiler-published layouts.
 
-Open clarification points:
+Open implementation points:
 
-- Should external builder fixtures use simple type scripts for resource cells, or scoped CellScript artifacts?
-- What `builder_assumption_evidence` shape is required for `cellc validate-tx` capacity policy?
-- When exactly should entry witness bytes be passed directly versus wrapped in `WitnessArgs`?
-- What is the canonical source for resource, shared, and receipt data layout?
+- Replace fixture resource type scripts with explicit scoped artifacts.
+- Generate structured `builder_assumption_evidence` from `cellc explain-assumptions` or `cellc solve-tx` output.
+- Treat script-group witness placement as group-relative, not necessarily transaction-global `witnesses[0]`.
+- Derive resource, shared, and receipt layouts from compiler outputs instead of copied harness structs.
 
 ## Usage
 

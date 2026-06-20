@@ -48,9 +48,11 @@ CellScript `v0.16.1` makes the intended builder path CLI-first:
 5. Validate transaction JSON with `cellc validate-tx` before signing.
 
 The Rust builder should not hand-encode `CSARGv1` payloads. It should consume
-`cellc entry-witness` output. For type-script actions this may mean wrapping
-the payload in CKB `WitnessArgs`; for the scoped `launch_token` lock-style
-fixture, the accepted transaction passed the entry witness directly.
+`cellc entry-witness` output. Do not wrap those bytes in CKB `WitnessArgs` by
+default. The generated CellScript entry wrapper reads raw entry-witness bytes
+from the current script group's witness surface. Use `WitnessArgs.input_type` or
+`WitnessArgs.output_type` only when the CellScript source explicitly reads those
+surfaces.
 
 ## Current Local Result
 
@@ -74,8 +76,9 @@ ahead of builder-validation completeness.
 ## Remaining Work
 
 - Clarify whether fixture-style resource type scripts are acceptable for external builders.
-- Add `builder_assumption_evidence` so `cellc validate-tx` passes before signing.
-- Move from fake `always_success` token cells to real CellScript typed cells.
+- Add structured `builder_assumption_evidence` from `cellc explain-assumptions`
+  or `cellc solve-tx` output so `cellc validate-tx` passes before signing.
+- Move from fake `always_success` token cells to explicit scoped CellScript artifacts.
 - Run `seed_pool` only when using standalone token cells.
 - Run `swap_a_for_b` against a live pool cell.
 - Integrate `cellc validate-tx` into the builder workflow.
@@ -85,5 +88,6 @@ ahead of builder-validation completeness.
 - Do not rely on source order or first-action behavior for builder fixtures.
   Select entries explicitly with `--entry-action`.
 - Do not hand-encode EntryWitness payloads when the compiler can generate them.
+- Do not assume transaction-global `witnesses[0]`; witness index 0 is script-group-relative.
 - Keep `always_success` only for lock scaffolding, not token or pool state.
 - Treat `amm_pool.cell` as a reference example, not production AMM code.
