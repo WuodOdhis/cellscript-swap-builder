@@ -52,6 +52,7 @@ only CellScript acceptance-harness scaffolding.
 - `cellc 0.16.1` ABI and entry-witness commands for CellScript actions
 - Scoped `launch_token.elf` deployed and accepted on local devnet
 - `launch_token` transaction committed: `0xaeeb1274c865df3d81216729b6491229cf955184f9800c723e6475012d62676d`
+- Saved `launch_token` transaction passes `cellc validate-tx` after attaching structured capacity evidence
 
 ## What is Unproven
 
@@ -125,6 +126,14 @@ Open implementation points:
 ```bash
 cargo run -- --example
 cargo run -- example_input.json
+```
+
+For the launch fixture script, set `LAUNCH_TX_JSON` to write a validation JSON
+with `builder_assumption_evidence` attached before submission:
+
+```bash
+CKB_PRIVKEY=... LAUNCH_TX_JSON=/tmp/opencode/launch_token_tx_with_evidence.json node scripts/launch_token_flow.js
+cellc validate-tx --against build/launch_token.elf.meta.json --json /tmp/opencode/launch_token_tx_with_evidence.json
 ```
 
 ## Acknowledgments

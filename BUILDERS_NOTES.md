@@ -73,11 +73,22 @@ This transaction was dry-run first and then committed. It used:
 `builder_assumption_evidence` for capacity policy. CKB acceptance is therefore
 ahead of builder-validation completeness.
 
+After attaching structured evidence for capacity assumption
+`ba-eabc81b64927584b`, the saved transaction passes `cellc validate-tx`:
+
+```bash
+cellc validate-tx --against build/launch_token.elf.meta.json --json /tmp/opencode/launch_token_tx_with_evidence.json
+```
+
+This validates the evidence shape gate. Production acceptance evidence still
+comes from CKB dry-run, final transaction size, occupied-capacity measurement,
+fee/change calculation, and signatures.
+
 ## Remaining Work
 
 - Clarify whether fixture-style resource type scripts are acceptable for external builders.
-- Add structured `builder_assumption_evidence` from `cellc explain-assumptions`
-  or `cellc solve-tx` output so `cellc validate-tx` passes before signing.
+- Generalize structured `builder_assumption_evidence` from `cellc explain-assumptions`
+  or `cellc solve-tx` output instead of hardcoding one assumption ID.
 - Move from fake `always_success` token cells to explicit scoped CellScript artifacts.
 - Run `seed_pool` only when using standalone token cells.
 - Run `swap_a_for_b` against a live pool cell.
