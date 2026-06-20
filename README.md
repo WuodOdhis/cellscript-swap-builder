@@ -136,6 +136,13 @@ CKB_PRIVKEY=... LAUNCH_TX_JSON=/tmp/opencode/launch_token_tx_with_evidence.json 
 cellc validate-tx --against build/launch_token.elf.meta.json --json /tmp/opencode/launch_token_tx_with_evidence.json
 ```
 
+To attach evidence to an existing transaction JSON without submitting a new tx:
+
+```bash
+node scripts/attach_builder_evidence.js /tmp/opencode/launch_token_tx.json /tmp/opencode/launch_token_tx_with_evidence.json /home/badman/Projects/amm-swap-builder/cellscript/examples/launch.cell 400000000000
+cellc validate-tx --against build/launch_token.elf.meta.json --json /tmp/opencode/launch_token_tx_with_evidence.json
+```
+
 ## Acknowledgments
 
 Contracts and CellScript guidance by ArthurZhang and the CellScript team.

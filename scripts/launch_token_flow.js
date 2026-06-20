@@ -5,6 +5,8 @@ const corePath = path.resolve('/home/badman/.nvm/versions/node/v20.19.5/lib/node
 const ccc = require(corePath);
 
 const RPC = 'http://127.0.0.1:28114';
+const CELLSCRIPT_DIR = '/home/badman/Projects/amm-swap-builder/cellscript';
+const LAUNCH_CELL = `${CELLSCRIPT_DIR}/examples/launch.cell`;
 const PRIVKEY = process.env.CKB_PRIVKEY;
 if (!PRIVKEY) { console.error('CKB_PRIVKEY env var required'); process.exit(1); }
 
@@ -56,7 +58,7 @@ function toRpcTx(tx) {
 }
 function toValidationTx(tx, inputCapacity) {
   const validationTx = toRpcTx(tx);
-  validationTx.builder_assumption_evidence = capacityEvidence(inputCapacity, tx.outputs);
+  validationTx.builder_assumption_evidence = builderAssumptionEvidence(loadBuilderAssumptions(), inputCapacity, tx.outputs);
   return validationTx;
 }
 function tokenData(amount, symbol) { return hex(Buffer.concat([u64le(amount), Buffer.from(symbol.padEnd(8, '\0'), 'ascii')])); }
@@ -71,17 +73,35 @@ function lpReceiptData(poolType, lpAmount, providerHash) {
 function fixedDistribution(recipients) {
   return hex(Buffer.concat(recipients.flatMap(([addressHash, amount]) => [Buffer.from(addressHash.slice(2), 'hex'), u64le(amount)])));
 }
-function capacityEvidence(inputCapacity, outputs) {
+function loadBuilderAssumptions() {
+  const result = execFileSync('cellc', [
+    'explain-assumptions', LAUNCH_CELL,
+    '--target-profile', 'ckb', '--primitive-strict', '0.16', '--json',
+  ], { encoding: 'utf8' });
+  return JSON.parse(result).builder_assumptions || [];
+}
+function builderAssumptionEvidence(assumptions, inputCapacity, outputs) {
   const outputCapacities = outputs.map((output) => BigInt(output.capacity));
   const outputsTotal = outputCapacities.reduce((sum, capacity) => sum + capacity, 0n);
-  return {
-    'ba-eabc81b64927584b': {
-      assumption_id: 'ba-eabc81b64927584b',
-      kind: 'capacity_policy',
-      origin: 'constraints.ckb',
-      feature: 'capacity-planning',
-      proof_plan_status: 'builder-required',
-      evidence: {
+  return Object.fromEntries(
+    assumptions
+      .filter((assumption) => assumption.proof_plan_status === 'builder-required')
+      .map((assumption) => [
+        assumption.assumption_id,
+        {
+          assumption_id: assumption.assumption_id,
+          kind: assumption.kind,
+          origin: assumption.origin,
+          feature: assumption.feature,
+          proof_plan_status: assumption.proof_plan_status,
+          evidence: evidencePayload(assumption, inputCapacity, outputCapacities, outputsTotal),
+        },
+      ]),
+  );
+}
+function evidencePayload(assumption, inputCapacity, outputCapacities, outputsTotal) {
+  if (assumption.kind === 'capacity_policy') {
+    return {
         source: 'builder',
         checked: true,
         note: 'Schema evidence for cellc validate-tx. CKB dry-run remains production acceptance evidence.',
@@ -91,9 +111,9 @@ function capacityEvidence(inputCapacity, outputs) {
         fee_paid_shannons: (inputCapacity - outputsTotal).toString(),
         capacity_is_sufficient: true,
         under_capacity_output_indexes: [],
-      },
-    },
-  };
+    };
+  }
+  return { source: 'builder', checked: true };
 }
 function makeClient() {
   const client = new ccc.ClientJsonRpc(RPC);
@@ -159,7 +179,7 @@ async function main() {
   const recipients = [[creatorHash, 10], [creatorHash, 20], [creatorHash, 30], [creatorHash, 40]];
   const distribution = fixedDistribution(recipients);
   const entry = JSON.parse(execFileSync('cellc', [
-    'entry-witness', '/home/badman/Projects/amm-swap-builder/cellscript/examples/launch.cell',
+    'entry-witness', LAUNCH_CELL,
     '--target-profile', 'ckb', '--action', 'launch_token', '--json',
     '--arg', '0x4c41554e43483031', '--arg', '10000', '--arg', '1000', '--arg', '500', '--arg', '30', '--arg', creatorHash, '--arg', distribution,
   ], { encoding: 'utf8' }));
