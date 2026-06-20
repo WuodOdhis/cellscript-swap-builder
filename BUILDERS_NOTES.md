@@ -90,9 +90,34 @@ fee/change calculation, and signatures.
 - Generalize structured `builder_assumption_evidence` from `cellc explain-assumptions`
   or `cellc solve-tx` output instead of hardcoding one assumption ID.
 - Move from fake `always_success` token cells to explicit scoped CellScript artifacts.
+- Resolve the next witness integration boundary: a scoped type-group action needs
+  raw `cellc entry-witness` bytes while the same transaction also needs secp
+  `WitnessArgs.lock` for signed inputs.
 - Run `seed_pool` only when using standalone token cells.
 - Run `swap_a_for_b` against a live pool cell.
 - Integrate `cellc validate-tx` into the builder workflow.
+
+## Scoped Mint Experiment
+
+`scripts/scoped_mint_flow.js` tests whether the scoped
+`token_mint_with_authority.elf` artifact can be used directly as the
+`MintAuthority` resource type script.
+
+The setup transaction fails when creating the authority output:
+
+```text
+Outputs[0].Type -> CellScript error 25: entry-witness-abi-invalid
+```
+
+That is useful negative evidence. An action artifact cannot simply be used as a
+passive resource type script during bootstrap, because output type verification
+still runs the scoped artifact and expects the action entry witness ABI.
+
+The next unresolved issue is the missing builder-facing manifest/check layer
+Arthur mentioned: the compiler artifacts expose schemas and action artifacts,
+but the external builder still needs an explicit way to bind resource cell
+identity without accidentally executing an action artifact as a passive output
+type script.
 
 ## Lessons
 
