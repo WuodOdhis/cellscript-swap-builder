@@ -1,58 +1,89 @@
-# Builder's Notes: Friction Points (Verified vs Unresolved)
+# Builder's Notes: Friction Points And v0.16.1 Follow-Up
 
-This document records friction encountered while building a transaction
-builder for CellScript amm_pool and token contracts. It separates what
-has been verified on the devnet from what is assumed or unresolved.
+This document records friction encountered while building a transaction builder
+for CellScript `amm_pool.cell` and `token.cell`. It also records what changed
+after ArthurZhang's `v0.16.1` release.
 
 ## Verified on Devnet (CKB v0.205.0, offckb v0.4.6)
 
-- `offckb deploy` works for single-ELF deployment (deploys ELF as code cell
-  with secp256k1 lock, returns change)
-- CCC `prepareTransaction()` before `signOnlyTransaction()` is required for
-  correct sighash (65-byte zeroed witness placeholder)
+- `offckb deploy` works for single-ELF deployment.
+- CCC `prepareTransaction()` before signing is required for correct secp256k1 sighash.
 - `getKnownScript` must return cellDeps with singular `cellDep` wrapper:
   `[{cellDep: {outPoint: {txHash, index}, depType}}]`
-- Genesis tx hash changes on every `offckb node start`
-- CellDep format: `{cellDep: {outPoint: {txHash, index: number}, depType}}`
-- Cells can be created on devnet (secp256k1 lock, always_success type)
-- ckb2023 fork: 1 CKB per byte occupied capacity
+- Genesis tx hash changes on every `offckb node start`.
+- Cells can be created on devnet with secp256k1 locks.
+- ckb2023 fork uses 1 CKB per byte occupied capacity.
 
-## Unverified Assumptions (Not Tested On Chain)
+## Original Blocker
 
-- The swap builder (Rust) has never produced a transaction sent to devnet.
-  Witness encoding was recently fixed but end-to-end validation is pending.
-- Token.elf creation path is unknown. The first action `mint` requires a
-  `MintAuthority` input cell, but no action in token.cell creates one.
-  This is a circular dependency not yet resolved.
-- The always_success ELF (hash_type data2) is used as a type script stand-in
-  for token cells. This bypasses all token validation.
-- EntryWitness format for seed_pool action parameters is reverse-engineered
-  from CellScript source, not validated against a running contract.
-- ProofPlan metadata exists in compiled artifacts, but this repo does not yet
-  validate ProofPlan assumptions in the builder.
+In CellScript `v0.16.0`, `token.cell` began with `mint`, which required an
+existing `MintAuthority` input. No action in `token.cell` created the first
+`MintAuthority`, so real token-cell creation was blocked.
 
-## Friction Points
+That blocker was real. It was fixed in CellScript `v0.16.1`.
 
-1. WitnessArgs molecule offset semantics -- ambiguous documentation on how
-   absent BytesOpt fields are encoded. Verified via CKB source: if a field's
-   offset equals total_size, the field is absent.
+## v0.16.1 Resolution
 
-2. EntryWitness spec -- no public document describing the CSARGv1 format.
-   Reverse-engineered from CellScript source at v0.16.0.
+- `token.cell::mint` is now `mint_with_authority`.
+- `launch.cell::bootstrap_token` creates the first `MintAuthority` and token outputs.
+- `launch.cell::launch_token` creates the first `MintAuthority`, token distribution,
+  pool topology, LP receipt, and change token directly.
+- `launch_token` does not call `amm_pool.seed_pool` implicitly. It materializes
+  the initial pool topology itself.
 
-3. Creation vs mutation dispatch -- CellScript runs the first action on
-   creation (no typed input). Mutation reads action from witness. This is
-   inferred from behavior, not documented.
+Official guide in CellScript checkout:
 
-4. CCC signing pipeline -- prepareTransaction order dependence is not
-   mentioned in CCC docs. Found by trial and error.
+```text
+docs/examples/token_amm_bootstrap.md
+```
 
-5. Genesis hash changes -- offckb devnet generates a new genesis at each
-   `offckb node start`. Cells from a previous session become unreachable.
+## Builder Integration Rules
 
-## Open Questions for Arthur / CellScript Team
+CellScript `v0.16.1` makes the intended builder path CLI-first:
 
-- How is the genesis MintAuthority cell created for token.cell?
-- Is there a canonical encode_witness_args function or utility?
-- Where is the EntryWitness format specified?
-- Is "first action on creation" a guaranteed CellScript invariant?
+1. Compile scoped artifacts with `--entry-action <action>`.
+2. Inspect entry ABI with `cellc abi`.
+3. Generate CellScript entry witness bytes with `cellc entry-witness`.
+4. Inspect builder assumptions with `cellc explain-assumptions`.
+5. Validate transaction JSON with `cellc validate-tx` before signing.
+
+The Rust builder should not hand-encode `CSARGv1` payloads. It should consume
+`cellc entry-witness` output. For type-script actions this may mean wrapping
+the payload in CKB `WitnessArgs`; for the scoped `launch_token` lock-style
+fixture, the accepted transaction passed the entry witness directly.
+
+## Current Local Result
+
+The first `launch_token` fixture transaction has been accepted on local devnet:
+
+```text
+0xaeeb1274c865df3d81216729b6491229cf955184f9800c723e6475012d62676d
+```
+
+This transaction was dry-run first and then committed. It used:
+
+- scoped `launch_token.elf` as the input lock script;
+- `cellc entry-witness` output as the direct witness;
+- fixture-style resource type scripts for `MintAuthority`, `Token`, `Pool`, and `LPReceipt`;
+- the output topology described by `launch.cell::launch_token`.
+
+`cellc validate-tx` still fails because the transaction JSON lacks
+`builder_assumption_evidence` for capacity policy. CKB acceptance is therefore
+ahead of builder-validation completeness.
+
+## Remaining Work
+
+- Clarify whether fixture-style resource type scripts are acceptable for external builders.
+- Add `builder_assumption_evidence` so `cellc validate-tx` passes before signing.
+- Move from fake `always_success` token cells to real CellScript typed cells.
+- Run `seed_pool` only when using standalone token cells.
+- Run `swap_a_for_b` against a live pool cell.
+- Integrate `cellc validate-tx` into the builder workflow.
+
+## Lessons
+
+- Do not rely on source order or first-action behavior for builder fixtures.
+  Select entries explicitly with `--entry-action`.
+- Do not hand-encode EntryWitness payloads when the compiler can generate them.
+- Keep `always_success` only for lock scaffolding, not token or pool state.
+- Treat `amm_pool.cell` as a reference example, not production AMM code.
