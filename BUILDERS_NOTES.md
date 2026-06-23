@@ -126,10 +126,24 @@ Generated manifests for:
 - `seed_pool`
 - `swap_a_for_b`
 
+`scripts/build_mint_candidate_from_manifest.js` now builds a
+`mint_with_authority` candidate transaction from the generated resource identity
+plan and raw `cellc entry-witness` output. It passes:
+
+```bash
+cellc builder check --manifest /tmp/opencode/cellscript-v0162/mint_with_authority.manifest.json \
+  --resource-identities /tmp/opencode/cellscript-v0162/token_resource_identity.plan.json \
+  --tx /tmp/opencode/cellscript-v0162/mint_candidate_tx.json \
+  --production
+```
+
+The result is `pre_sign_ready: true` and `submit_ready: false`, because the
+candidate still uses placeholder input cells and has no signatures or CKB dry-run.
+
 ## Remaining Work
 
-- Deploy the generated passive resource identity artifact on the current devnet.
-- Rebuild bootstrap and mint scripts using resource identity plan scripts instead of fixtures.
+- Replace the manifest candidate's placeholder input with a live `MintAuthority` cell.
+- Add real CellDeps for secp and deployed passive resource identity code.
 - Run `cellc builder check --production` on each candidate transaction before signing.
 - Then run CKB dry-run and submit only if both checks pass.
 - Continue to `seed_pool` and `swap_a_for_b` after real token cells are live.

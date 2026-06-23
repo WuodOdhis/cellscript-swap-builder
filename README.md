@@ -59,6 +59,7 @@ only CellScript acceptance-harness scaffolding.
 - Scoped `launch_token.elf` deployed and accepted on local devnet
 - `launch_token` transaction committed: `0xaeeb1274c865df3d81216729b6491229cf955184f9800c723e6475012d62676d`
 - Saved `launch_token` transaction passes `cellc validate-tx` after attaching structured capacity evidence
+- A manifest-built `mint_with_authority` candidate passes `cellc builder check --production`
 
 ## What is Unproven
 
@@ -149,7 +150,7 @@ fresh transaction path that uses those generated identities and passes
 Open implementation points:
 
 - Deploy the generated passive resource identity artifact.
-- Rebuild bootstrap and mint scripts from `resource-identity` and builder manifest outputs.
+- Replace placeholder candidate inputs with live cells and signatures.
 - Treat script-group witness placement as group-relative, not necessarily transaction-global `witnesses[0]`.
 - Use `cellc builder check --production` before CKB dry-run and submission.
 
@@ -173,6 +174,17 @@ To attach evidence to an existing transaction JSON without submitting a new tx:
 ```bash
 node scripts/attach_builder_evidence.js /tmp/opencode/launch_token_tx.json /tmp/opencode/launch_token_tx_with_evidence.json /home/badman/Projects/amm-swap-builder/cellscript/examples/launch.cell 400000000000
 cellc validate-tx --against build/launch_token.elf.meta.json --json /tmp/opencode/launch_token_tx_with_evidence.json
+```
+
+To build a manifest-based mint candidate and check it before live-cell wiring:
+
+```bash
+node scripts/build_mint_candidate_from_manifest.js
+cellc builder check \
+  --manifest /tmp/opencode/cellscript-v0162/mint_with_authority.manifest.json \
+  --resource-identities /tmp/opencode/cellscript-v0162/token_resource_identity.plan.json \
+  --tx /tmp/opencode/cellscript-v0162/mint_candidate_tx.json \
+  --production
 ```
 
 ## Acknowledgments
