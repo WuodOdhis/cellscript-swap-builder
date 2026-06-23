@@ -1,8 +1,8 @@
-# Builder's Notes: Friction Points And v0.16.1 Follow-Up
+# Builder's Notes: CellScript Builder Integration
 
-This document records friction encountered while building a transaction builder
-for CellScript `amm_pool.cell` and `token.cell`. It also records what changed
-after ArthurZhang's `v0.16.1` release.
+This document records friction encountered while building an external transaction
+builder for CellScript `amm_pool.cell` and `token.cell`. It separates historical
+fixture work from the current compiler-supported builder path.
 
 ## Verified on Devnet (CKB v0.205.0, offckb v0.4.6)
 
@@ -37,15 +37,21 @@ Official guide in CellScript checkout:
 docs/examples/token_amm_bootstrap.md
 ```
 
-## Builder Integration Rules
+## v0.16.2 Builder Path
 
-CellScript `v0.16.1` makes the intended builder path CLI-first:
+CellScript `v0.16.2` adds the missing builder-facing UX:
 
-1. Compile scoped artifacts with `--entry-action <action>`.
-2. Inspect entry ABI with `cellc abi`.
-3. Generate CellScript entry witness bytes with `cellc entry-witness`.
-4. Inspect builder assumptions with `cellc explain-assumptions`.
-5. Validate transaction JSON with `cellc validate-tx` before signing.
+- `cellc resource-identity` generates passive resource type-script identities.
+- `cellc builder manifest` emits one action-scoped builder contract.
+- `cellc builder check` validates a candidate transaction against the manifest.
+
+The current CLI-first path is:
+
+1. Generate passive resource identity artifacts and plans with `cellc resource-identity`.
+2. Compile scoped action artifacts with `--entry-action <action>`.
+3. Generate action manifests with `cellc builder manifest`.
+4. Generate raw entry witness bytes with `cellc entry-witness`.
+5. Run `cellc builder check --production` before CKB dry-run and signing.
 
 The Rust builder should not hand-encode `CSARGv1` payloads. It should consume
 `cellc entry-witness` output. Do not wrap those bytes in CKB `WitnessArgs` by
@@ -84,18 +90,49 @@ This validates the evidence shape gate. Production acceptance evidence still
 comes from CKB dry-run, final transaction size, occupied-capacity measurement,
 fee/change calculation, and signatures.
 
+## v0.16.2 Outputs Generated Locally
+
+Generated passive token identities:
+
+```bash
+cellc resource-identity examples/token.cell --target-profile ckb --primitive-strict 0.16 \
+  --type MintAuthority --type Token \
+  --identity MintAuthority=launch01-auth --identity Token=launch01-token \
+  --output /tmp/opencode/cellscript-v0162/token_resource_identity.elf \
+  --plan-output /tmp/opencode/cellscript-v0162/token_resource_identity.plan.json
+```
+
+Generated passive AMM identities:
+
+```bash
+cellc resource-identity examples/amm_pool.cell --target-profile ckb --primitive-strict 0.16 \
+  --type Pool --type LPReceipt \
+  --identity Pool=launch01-pool --identity LPReceipt=launch01-lp \
+  --output /tmp/opencode/cellscript-v0162/amm_resource_identity.elf \
+  --plan-output /tmp/opencode/cellscript-v0162/amm_resource_identity.plan.json
+```
+
+Both plans use a compiler-generated passive identity artifact:
+
+```text
+code_hash: 0x735490d86a2a15012cd2d5aa0794e1358b8b57e701bd365ee618b06056f16ce4
+hash_type: data1
+witness: none; this passive badge only decodes Script.args
+```
+
+Generated manifests for:
+
+- `mint_with_authority`
+- `seed_pool`
+- `swap_a_for_b`
+
 ## Remaining Work
 
-- Clarify whether fixture-style resource type scripts are acceptable for external builders.
-- Generalize structured `builder_assumption_evidence` from `cellc explain-assumptions`
-  or `cellc solve-tx` output instead of hardcoding one assumption ID.
-- Move from fake `always_success` token cells to explicit scoped CellScript artifacts.
-- Resolve the next witness integration boundary: a scoped type-group action needs
-  raw `cellc entry-witness` bytes while the same transaction also needs secp
-  `WitnessArgs.lock` for signed inputs.
-- Run `seed_pool` only when using standalone token cells.
-- Run `swap_a_for_b` against a live pool cell.
-- Integrate `cellc validate-tx` into the builder workflow.
+- Deploy the generated passive resource identity artifact on the current devnet.
+- Rebuild bootstrap and mint scripts using resource identity plan scripts instead of fixtures.
+- Run `cellc builder check --production` on each candidate transaction before signing.
+- Then run CKB dry-run and submit only if both checks pass.
+- Continue to `seed_pool` and `swap_a_for_b` after real token cells are live.
 
 ## Scoped Mint Experiment
 
@@ -113,11 +150,9 @@ That is useful negative evidence. An action artifact cannot simply be used as a
 passive resource type script during bootstrap, because output type verification
 still runs the scoped artifact and expects the action entry witness ABI.
 
-The next unresolved issue is the missing builder-facing manifest/check layer
-Arthur mentioned: the compiler artifacts expose schemas and action artifacts,
-but the external builder still needs an explicit way to bind resource cell
-identity without accidentally executing an action artifact as a passive output
-type script.
+This gap is fixed in CellScript `v0.16.2` by `cellc resource-identity` and
+`cellc builder manifest/check`. The script remains as negative evidence for why
+the new flow is necessary.
 
 ## Lessons
 
