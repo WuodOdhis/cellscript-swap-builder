@@ -148,6 +148,27 @@ candidate still uses placeholder input cells and has no signatures or CKB dry-ru
 - Then run CKB dry-run and submit only if both checks pass.
 - Continue to `seed_pool` and `swap_a_for_b` after real token cells are live.
 
+## Clean Launch Builder
+
+`scripts/build_launch_tx.py` is the current hackathon demo path for
+`launch.cell::launch_token`. It replaces the hand-wired diagnostic builder with a
+CLI script that:
+
+- loads passive output type scripts from the compiler-generated launch resource identity plan;
+- reads the paired funding token amount and symbol from a live devnet cell;
+- computes CKB script hashes using Molecule-packed `Script` encoding;
+- uses `cellc entry-witness` for canonical `CSARGv1` bytes;
+- dry-runs by default and only broadcasts with `--submit`.
+
+Verified local devnet dry-run:
+
+```text
+Dry run OK: 49848 cycles
+```
+
+The transaction has not been submitted from this cleaned builder yet, by design,
+so the launch funding cell remains available for demos.
+
 ## Scoped Mint Experiment
 
 `scripts/scoped_mint_flow.js` tests whether the scoped

@@ -60,6 +60,7 @@ only CellScript acceptance-harness scaffolding.
 - `launch_token` transaction committed: `0xaeeb1274c865df3d81216729b6491229cf955184f9800c723e6475012d62676d`
 - Saved `launch_token` transaction passes `cellc validate-tx` after attaching structured capacity evidence
 - A manifest-built `mint_with_authority` candidate passes `cellc builder check --production`
+- `scripts/build_launch_tx.py` builds a launch transaction from compiler-generated resource identities and live devnet funding-cell data; default mode is dry-run only.
 
 ## What is Unproven
 
@@ -68,6 +69,7 @@ only CellScript acceptance-harness scaffolding.
 - `cellc builder check` integrated into the end-to-end builder scripts
 - The Rust builder's output accepted by CKB consensus
 - A non-fixture `mint_with_authority`, `seed_pool`, or `swap_a_for_b` transaction accepted on devnet
+- Final `launch_token` broadcast using the cleaned CLI builder; current verified state is devnet dry-run, not chain submission.
 
 ## CLI-First Workflow
 
@@ -186,6 +188,19 @@ cellc builder check \
   --tx /tmp/opencode/cellscript-v0162/mint_candidate_tx.json \
   --production
 ```
+
+To build and dry-run the current `launch_token` devnet transaction without consuming the funding cell:
+
+```bash
+python3 scripts/build_launch_tx.py \
+  --package-dir /tmp/opencode/cellscript-v0162/pkg \
+  --identity-plan /tmp/opencode/cellscript-v0162/pkg/build/latest.resource-identities.json
+```
+
+The script reads the paired funding token from devnet, loads output type identities
+from the CellScript resource identity plan, generates the raw entry witness with
+`cellc`, writes `launch_tx_final.json`, and calls `dry_run_transaction`. Add
+`--submit` only when you intend to consume the launch funding cell.
 
 ## Acknowledgments
 
